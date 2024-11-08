@@ -1,0 +1,45 @@
+# ROS2 workspace directories
+build/
+install/
+log/
+
+# ROS 2 workspace configuration
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# ROS 2 CMake build files
+CMakeLists.txt.user
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+CMakeFiles/
+
+# ROS 2 launch files and other temporary files
+*.launch.pyc
+*.launch.pyo
+
+# IDE configuration files
+.vscode/
+.idea/
+*.swp
+
+# Python virtual environment (if using a virtualenv)
+venv/
+.env/
+
+# Python distribution files
+*.egg-info/
+dist/
+.eggs/
+
+# Miscellaneous system files
+.DS_Store
+Thumbs.db
+
+# Ignore a specific file
+/my_map_serial.data
+/my_map_serial.posegraph
+/my_map.pgm
+/my_map.yaml
