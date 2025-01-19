@@ -1,49 +1,38 @@
 import subprocess
+import time
 
-def run_command_in_terminator(command):
-    """Run a command in a new Terminator window."""
-    subprocess.Popen(['terminator', '-e', f'bash -c "source ~/bot_ws/install/setup.bash; {command}; exec bash"'])
+def run_commands_in_split_panes(command_list):
+    subprocess.Popen(["terminator", "--maximize"])
+    time.sleep(3)  
+    if len(command_list)>1:
+        for i, cmd in enumerate(command_list):
+            if i % 2 == 1:
+                subprocess.run(["xdotool", "key", "ctrl+shift+e"])
+            else:
+                subprocess.run(["xdotool", "key", "ctrl+shift+o"])
+            time.sleep(1)  
 
-# Define the different commands
+            full_cmd = f"source ~/dummy_bot_trail_ws/install/setup.bash && {cmd}" 
+            subprocess.run(["xdotool", "type", "--delay", "1", full_cmd])
+            subprocess.run(["xdotool", "key", "Return"])
+            time.sleep(2)  
+    else:
+        for i,cmd in enumerate(command_list):
+            full_cmd = f"source ~/dummy_bot_trail_ws/install/setup.bash && {cmd}" 
+            subprocess.run(["xdotool", "type", "--delay", "1", full_cmd])
+            subprocess.run(["xdotool", "key", "Return"])
+            time.sleep(2)
+
 commands = {
-    "gazebo_simulation": [
-        "ros2 launch kv_bot launch_sim.launch.py world:=./src/kv_bot/worlds/obstacles.world"
+    "commands": [
+        "ros2 launch kv_bot launch_sim.launch.py world:=./src/kv_bot/worlds/obstacles.world",
+        "ros2 launch kv_bot online_async_launch.py use_sim_time:=true",  
+        "ros2 run rviz2 rviz2 -d src/kv_bot/config/main.rviz --ros-args -p use_sim_time:=true"
     ],
-    "rviz_simulation": [
-        "ros2 run rviz2 rviz2 -d src/kv_bot/config/main.rviz --ros-args -p use_sim_time:=true",
-        "ros2 launch kv_bot online_async_launch.py use_sim_time:=true"
-    ],
-    "ball_tracking": [
-        "ros2 launch kv_bot ball_tracker.launch.py sim_mode:=true"
-    ],
-    "navigation": [
-        "ros2 launch kv_bot navigation_launch.py use_sim_time:=true"
-    ],
-    "teleop": [
+    "command2": [
         "ros2 run teleop_twist_keyboard teleop_twist_keyboard"
     ]
 }
 
-def execute_gazebo_simulation():
-    for cmd in commands["gazebo_simulation"]:
-        run_command_in_terminator(cmd)
-
-def execute_rviz_simulation():
-    for cmd in commands["rviz_simulation"]:
-        run_command_in_terminator(cmd)
-
-def execute_ball_tracking():
-    for cmd in commands["ball_tracking"]:
-        run_command_in_terminator(cmd)
-
-def execute_navigation():
-    for cmd in commands["navigation"]:
-        run_command_in_terminator(cmd)
-
-def execute_teleop():
-    for cmd in commands["teleop"]:
-        run_command_in_terminator(cmd)
-
-# Example of executing commands in new terminator windows
-execute_gazebo_simulation()
-execute_rviz_simulation()
+run_commands_in_split_panes(commands["commands"])
+run_commands_in_split_panes(commands["command2"])
