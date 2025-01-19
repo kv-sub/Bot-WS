@@ -12,13 +12,13 @@ def run_commands_in_split_panes(command_list):
                 subprocess.run(["xdotool", "key", "ctrl+shift+o"])
             time.sleep(1)  
 
-            full_cmd = f"source ~/dummy_bot_trail_ws/install/setup.bash && {cmd}" 
+            full_cmd = f"source ~/bot_ws/install/setup.bash && {cmd}" 
             subprocess.run(["xdotool", "type", "--delay", "1", full_cmd])
             subprocess.run(["xdotool", "key", "Return"])
             time.sleep(2)  
     else:
         for i,cmd in enumerate(command_list):
-            full_cmd = f"source ~/dummy_bot_trail_ws/install/setup.bash && {cmd}" 
+            full_cmd = f"source ~/bot_ws/install/setup.bash && {cmd}" 
             subprocess.run(["xdotool", "type", "--delay", "1", full_cmd])
             subprocess.run(["xdotool", "key", "Return"])
             time.sleep(2)
